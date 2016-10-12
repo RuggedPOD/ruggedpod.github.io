@@ -1,0 +1,2 @@
+# RuggedPOD web resources
+
