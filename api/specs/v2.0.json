@@ -10,8 +10,8 @@
     "basePath": "/v2",
     "tags": [
         {
-            "name": "/authentication",
-            "description": "Authentication"
+            "name": "/",
+            "description": ""
         },
         {
             "name": "/pods",
@@ -46,10 +46,10 @@
         "/tokens": {
             "post": {
                 "tags": [
-                    "/authentication"
+                    "/"
                 ],
                 "summary": "Perform authentication",
-                "description": "Create de token providing username and password. Token can be found in a cookie named X-Auth-Token from the response.",
+                "description": "Create a token providing username and password.",
                 "operationId": "authentication",
                 "parameters": [
                     {
@@ -64,7 +64,14 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "A new token has been created"
+                        "description": "A new token has been created",
+                        "schema": {
+                            "$ref": "#/definitions/Token"
+                        },
+                        "examples": {
+                            "token": "iYgLzjm+45EFRBX4rxyjZWt+qEs0snb0KNR4iW6JSOxyiWzFd6cmDb172OqWMQEcicsYbgotJ3/pZY4y/Xu7l1hlUDJkMxA585r9VX7cJDQ1azjcwt9N/WvbDJ5Iviflg4CPsrAceIGiHZVMAbpnD1y6WM1E+mMdsjbQsZaHRBWAz8zKKvZ4JkQzQvoH+LUabGwOvxyc/MV6xIFqcKQRAZQ==",
+                            "expires": "2016-10-13T12:05:55Z"
+                        }
                     },
                     "400": {
                         "description": "Username or password is missing"
@@ -1008,6 +1015,17 @@
                 },
                 "password": {
                     "type": "string"
+                }
+            }
+        },
+        "Token": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "expires": {
+                    "type": "date"
                 }
             }
         },
