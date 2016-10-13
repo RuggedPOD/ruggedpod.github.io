@@ -587,7 +587,7 @@
                 ],
                 "summary": "Activate the blade serial port",
                 "description": "Activate the blade serial port",
-                "operationId": "bladePower",
+                "operationId": "bladeSerial",
                 "produces": [
                     "application/json"
                 ],
@@ -621,6 +621,87 @@
             }
         },
 
+        "/pods/{podId}/blades/{id}/pumps/start": {
+            "patch": {
+                "tags": [
+                    "/pods/{podId}/blades"
+                ],
+                "summary": "Start pump on the specified blade",
+                "description": "Start pump on the specified blade",
+                "operationId": "bladePumpStart",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "Authentication token",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Blade ID in the POD",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Action succeed on the blade"
+                    },
+                    "409": {
+                        "description": "Conflict because another incompatible operation is still in progress"
+                    },
+                    "401": {
+                        "description": "Authentication is required"
+                    }
+                }
+            }
+        },
+
+        "/pods/{podId}/blades/{id}/pumps/stop": {
+            "patch": {
+                "tags": [
+                    "/pods/{podId}/blades"
+                ],
+                "summary": "Stop pump on the specified blade",
+                "description": "Stop pump on the specified blade",
+                "operationId": "bladePumpStop",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "Authentication token",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Blade ID in the POD",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Action succeed on the blade"
+                    },
+                    "409": {
+                        "description": "Conflict because another incompatible operation is still in progress"
+                    },
+                    "401": {
+                        "description": "Authentication is required"
+                    }
+                }
+            }
+        },
 
         "/pods/{podId}/pumps/start": {
             "patch": {
