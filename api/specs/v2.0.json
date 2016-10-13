@@ -10,8 +10,8 @@
     "basePath": "/v2",
     "tags": [
         {
-            "name": "/authentication",
-            "description": "Authentication"
+            "name": "/",
+            "description": ""
         },
         {
             "name": "/pods",
@@ -46,10 +46,10 @@
         "/tokens": {
             "post": {
                 "tags": [
-                    "/authentication"
+                    "/"
                 ],
                 "summary": "Perform authentication",
-                "description": "Create de token providing username and password. Token can be found in a cookie named X-Auth-Token from the response.",
+                "description": "Create a token providing username and password.",
                 "operationId": "authentication",
                 "parameters": [
                     {
@@ -64,7 +64,14 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "A new token has been created"
+                        "description": "A new token has been created",
+                        "schema": {
+                            "$ref": "#/definitions/Token"
+                        },
+                        "examples": {
+                            "token": "iYgLzjm+45EFRBX4rxyjZWt+qEs0snb0KNR4iW6JSOxyiWzFd6cmDb172OqWMQEcicsYbgotJ3/pZY4y/Xu7l1hlUDJkMxA585r9VX7cJDQ1azjcwt9N/WvbDJ5Iviflg4CPsrAceIGiHZVMAbpnD1y6WM1E+mMdsjbQsZaHRBWAz8zKKvZ4JkQzQvoH+LUabGwOvxyc/MV6xIFqcKQRAZQ==",
+                            "expires": "2016-10-13T12:05:55Z"
+                        }
                     },
                     "400": {
                         "description": "Username or password is missing"
@@ -305,6 +312,7 @@
                                 "name": "lab-compute-001",
                                 "description": "OpenStack compute node",
                                 "consumption": 37,
+                                "status": "RUNNING",
                                 "tags": [
                                     "cloud", "lab", "compute"
                                 ]
@@ -314,6 +322,7 @@
                                 "name": "lab-compute-002",
                                 "description": "OpenStack compute node",
                                 "consumption": 64,
+                                "status": "RUNNING",
                                 "tags": [
                                     "cloud", "lab", "compute"
                                 ]
@@ -580,7 +589,7 @@
                 ],
                 "summary": "Activate the blade serial port",
                 "description": "Activate the blade serial port",
-                "operationId": "bladePower",
+                "operationId": "bladeSerial",
                 "produces": [
                     "application/json"
                 ],
@@ -614,6 +623,182 @@
             }
         },
 
+        "/pods/{podId}/blades/{id}/build": {
+            "post": {
+                "tags": [
+                    "/pods/{podId}/blades"
+                ],
+                "summary": "Set the blade in build mode",
+                "description": "Set the blade in build mode",
+                "operationId": "bladeBuild",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "Authentication token",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Blade ID in the POD",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Blade build",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BladeBuild"
+                        },
+                        "examples": {
+                            "os":"ubuntu1404",
+                            "hostname":"blade1",
+                            "username":"ruggedpod",
+                            "password":"ruggedpod",
+                            "ssh_pub_key":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLHYKg5W0NMmYOOkt1FH3/Hc6KaHsKHVPvc7cvrb1THdmm9EjZIfkX83AyXdq98cN3mOK6s8vtIvwlX6mFGgOfaD/mHauD1Om/eugSqdqIdOOuAYvpEMOuH/nzU72DPQIO8Gj0O4fqJQP+kUMqMPtsvBfNSYD4w1vr78yB7NJxBDoRv6Heqc0mt4F72+MmG0KLh57khhIFIYdEQzHpV4JIBExKwasPpohtbMqVDDJsEMEGlxTeGEL++L1nv3hlC1K5GrOF9tIgKMDinnJetvu42nXkpoLH4RgT6LVdm0ZJF/U6IgAO1Ob6Z1hIzFu1XfVtLK7U35sIZ/BkGjb"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Action succeed on the blade"
+                    },
+                    "409": {
+                        "description": "Conflict because another incompatible operation is still in progress"
+                    },
+                    "401": {
+                        "description": "Authentication is required"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "/pods/{podId}/blades"
+                ],
+                "summary": "Terminate build operation",
+                "description": "Terminate build operation",
+                "operationId": "bladeBuild",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "Authentication token",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Blade ID in the POD",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Action succeed on the blade"
+                    },
+                    "409": {
+                        "description": "Conflict because another incompatible operation is still in progress"
+                    },
+                    "401": {
+                        "description": "Authentication is required"
+                    }
+                }
+            }
+        },
+
+        "/pods/{podId}/blades/{id}/pumps/start": {
+            "patch": {
+                "tags": [
+                    "/pods/{podId}/blades"
+                ],
+                "summary": "Start pump on the specified blade",
+                "description": "Start pump on the specified blade",
+                "operationId": "bladePumpStart",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "Authentication token",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Blade ID in the POD",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Action succeed on the blade"
+                    },
+                    "409": {
+                        "description": "Conflict because another incompatible operation is still in progress"
+                    },
+                    "401": {
+                        "description": "Authentication is required"
+                    }
+                }
+            }
+        },
+
+        "/pods/{podId}/blades/{id}/pumps/stop": {
+            "patch": {
+                "tags": [
+                    "/pods/{podId}/blades"
+                ],
+                "summary": "Stop pump on the specified blade",
+                "description": "Stop pump on the specified blade",
+                "operationId": "bladePumpStop",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "Authentication token",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Blade ID in the POD",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Action succeed on the blade"
+                    },
+                    "409": {
+                        "description": "Conflict because another incompatible operation is still in progress"
+                    },
+                    "401": {
+                        "description": "Authentication is required"
+                    }
+                }
+            }
+        },
 
         "/pods/{podId}/pumps/start": {
             "patch": {
@@ -1011,6 +1196,17 @@
                 }
             }
         },
+        "Token": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "expires": {
+                    "type": "date"
+                }
+            }
+        },
         "Pod": {
             "type": "object",
             "required": [
@@ -1046,6 +1242,9 @@
                 "description": {
                     "type": "string"
                 },
+                "status": {
+                    "type": "string"
+                },
                 "consumption": {
                     "type": "integer"
                 },
@@ -1054,6 +1253,29 @@
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "BladeBuild": {
+            "type": "object",
+            "required": [
+                "os", "username"
+            ],
+            "properties": {
+                "os": {
+                    "type": "string"
+                },
+                "hostname": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "ssh_pub_key": {
+                    "type": "string"
                 }
             }
         },
