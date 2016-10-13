@@ -623,6 +623,101 @@
             }
         },
 
+        "/pods/{podId}/blades/{id}/build": {
+            "post": {
+                "tags": [
+                    "/pods/{podId}/blades"
+                ],
+                "summary": "Set the blade in build mode",
+                "description": "Set the blade in build mode",
+                "operationId": "bladeBuild",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "Authentication token",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Blade ID in the POD",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Blade build",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BladeBuild"
+                        },
+                        "examples": {
+                            "os":"ubuntu1404",
+                            "hostname":"blade1",
+                            "username":"ruggedpod",
+                            "password":"ruggedpod",
+                            "ssh_pub_key":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLHYKg5W0NMmYOOkt1FH3/Hc6KaHsKHVPvc7cvrb1THdmm9EjZIfkX83AyXdq98cN3mOK6s8vtIvwlX6mFGgOfaD/mHauD1Om/eugSqdqIdOOuAYvpEMOuH/nzU72DPQIO8Gj0O4fqJQP+kUMqMPtsvBfNSYD4w1vr78yB7NJxBDoRv6Heqc0mt4F72+MmG0KLh57khhIFIYdEQzHpV4JIBExKwasPpohtbMqVDDJsEMEGlxTeGEL++L1nv3hlC1K5GrOF9tIgKMDinnJetvu42nXkpoLH4RgT6LVdm0ZJF/U6IgAO1Ob6Z1hIzFu1XfVtLK7U35sIZ/BkGjb"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Action succeed on the blade"
+                    },
+                    "409": {
+                        "description": "Conflict because another incompatible operation is still in progress"
+                    },
+                    "401": {
+                        "description": "Authentication is required"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "/pods/{podId}/blades"
+                ],
+                "summary": "Terminate build operation",
+                "description": "Terminate build operation",
+                "operationId": "bladeBuild",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "Authentication token",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Blade ID in the POD",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Action succeed on the blade"
+                    },
+                    "409": {
+                        "description": "Conflict because another incompatible operation is still in progress"
+                    },
+                    "401": {
+                        "description": "Authentication is required"
+                    }
+                }
+            }
+        },
+
         "/pods/{podId}/blades/{id}/pumps/start": {
             "patch": {
                 "tags": [
@@ -1158,6 +1253,29 @@
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "BladeBuild": {
+            "type": "object",
+            "required": [
+                "os", "username"
+            ],
+            "properties": {
+                "os": {
+                    "type": "string"
+                },
+                "hostname": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "ssh_pub_key": {
+                    "type": "string"
                 }
             }
         },
