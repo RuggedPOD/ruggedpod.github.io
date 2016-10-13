@@ -312,6 +312,7 @@
                                 "name": "lab-compute-001",
                                 "description": "OpenStack compute node",
                                 "consumption": 37,
+                                "status": "RUNNING",
                                 "tags": [
                                     "cloud", "lab", "compute"
                                 ]
@@ -321,6 +322,7 @@
                                 "name": "lab-compute-002",
                                 "description": "OpenStack compute node",
                                 "consumption": 64,
+                                "status": "RUNNING",
                                 "tags": [
                                     "cloud", "lab", "compute"
                                 ]
@@ -1143,6 +1145,9 @@
                     "type": "string"
                 },
                 "description": {
+                    "type": "string"
+                },
+                "status": {
                     "type": "string"
                 },
                 "consumption": {
