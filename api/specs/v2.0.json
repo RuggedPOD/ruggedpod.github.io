@@ -26,6 +26,14 @@
             "description": "Pumps management"
         },
         {
+            "name": "/pods/{podId}/dhcp",
+            "description": "DHCP Configuration"
+        },
+        {
+            "name": "/pods/{podId}/i2c",
+            "description": "I2C Bus Configuration"
+        },
+        {
             "name": "/users",
             "description": "Users management"
         },
@@ -856,6 +864,129 @@
             }
         },
 
+        "/pods/{podId}/dhcp": {
+            "get": {
+                "tags": [
+                    "/pods/{podId}/dhcp"
+                ],
+                "summary": "Read DHCP configuration",
+                "description": "Read DHCP configuration",
+                "operationId": "dhcpRead",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "Authentication token",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return DHCP configuration",
+                        "schema": {
+                            "$ref": "#/definitions/Dhcp"
+                        },
+                        "examples": {
+                            "dhcp_mode": "proxy",
+                            "dhcp_range_start": null,
+                            "dhcp_lease_duration": "infinite",
+                            "dhcp_network": "192.168.1.0/24",
+                            "dhcp_range_end": null
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication is required"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "/pods/{podId}/dhcp"
+                ],
+                "summary": "Update DHCP configuration",
+                "description": "Update DHCP configuration",
+                "operationId": "dhcpUpdate",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "Authentication token",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "DHCP Configuration",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Dhcp"
+                        },
+                        "examples": {
+                            "dhcp_mode": "dhcp",
+                            "dhcp_range_start": "192.168.1.30",
+                            "dhcp_lease_duration": "infinite",
+                            "dhcp_network": "192.168.1.0/24",
+                            "dhcp_range_end": "192.168.1.30"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return DHCP configuration",
+                        "schema": {
+                            "$ref": "#/definitions/Dhcp"
+                        },
+                        "examples": {
+                            "dhcp_mode": "dhcp",
+                            "dhcp_range_start": "192.168.1.30",
+                            "dhcp_lease_duration": "infinite",
+                            "dhcp_network": "192.168.1.0/24",
+                            "dhcp_range_end": "192.168.1.30"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication is required"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "/pods/{podId}/dhcp"
+                ],
+                "summary": "Refresh DHCP configuration",
+                "description": "Refresh DHCP configuration",
+                "operationId": "dhcpRefresh",
+                "parameters": [
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "Authentication token",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Operation succeed"
+                    },
+                    "401": {
+                        "description": "Authentication is required"
+                    }
+                }
+            }
+        },
+
         "/profiles": {
             "get": {
                 "tags": [
@@ -929,22 +1060,6 @@
             }
 
         },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         "/users": {
             "get": {
@@ -1275,6 +1390,26 @@
                     "type": "string"
                 },
                 "ssh_pub_key": {
+                    "type": "string"
+                }
+            }
+        },
+        "Dhcp": {
+            "type": "object",
+            "properties": {
+                "dhcp_mode": {
+                    "type": "string"
+                },
+                "dhcp_range_start": {
+                    "type": "string"
+                },
+                "dhcp_range_end": {
+                    "type": "string"
+                },
+                "dhcp_lease_duration": {
+                    "type": "string"
+                },
+                "dhcp_network": {
                     "type": "string"
                 }
             }
